@@ -1,5 +1,5 @@
 <h1>--- ARDUINO </h1>
-O projeto do meu primeiro semestre no curso Sistemas de Informação, foi um jogo de farmar click feito por meio do arduino.
+O projeto do meu primeiro semestre no curso Sistemas de Informação, foi um jogo de farmar click feito no arduino.
 
 Protótipo no Tinkeracad:
 
