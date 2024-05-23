@@ -1,0 +1,176 @@
+#define bot1 D0
+#define bot2 10 // SD3
+#define led11 D1
+#define led12 D2
+#define led13 D3
+#define led14 D4
+#define led21 D8
+#define led22 D7
+#define led23 D6
+#define led24 D5
+
+int vencedor;
+int pontos1;
+int estadoAnterior1;
+int pontos2;
+int estadoAnterior2;
+long horaUltimoClick1;
+long horaUltimoClick2;
+
+// Função para inicializar o jogo
+void setup() {
+  vencedor = 0;
+  pontos1 = 0;
+  estadoAnterior1 = 0;
+  pontos2 = 0;
+  estadoAnterior2 = 0;
+  horaUltimoClick1 = 0;
+  horaUltimoClick2 = 0;
+  pinMode(bot1, INPUT);
+  pinMode(bot2, INPUT);
+  pinMode(led11, OUTPUT);
+  pinMode(led12, OUTPUT);
+  pinMode(led13, OUTPUT);
+  pinMode(led14, OUTPUT);
+  pinMode(led21, OUTPUT);
+  pinMode(led22, OUTPUT);
+  pinMode(led23, OUTPUT);
+  pinMode(led24, OUTPUT);
+}
+
+void atualizarBarrinha() {
+  // Para ligar os leds do jogador 1
+  if (pontos1 < 8) {
+    // Apaga todos os leds
+    digitalWrite(led11, LOW);
+    digitalWrite(led12, LOW);
+    digitalWrite(led13, LOW);
+    digitalWrite(led14, LOW);
+  } else if (pontos1 >= 8 && pontos1 < 16) {
+    // Apaga tudo, e acende 1 led
+    digitalWrite(led11, HIGH);
+    digitalWrite(led12, LOW);
+    digitalWrite(led13, LOW);
+    digitalWrite(led14, LOW);
+  } else if (pontos1 >= 16 && pontos1 < 24) {
+    // Apaga tudo, e acende 2 leds
+    digitalWrite(led11, HIGH);
+    digitalWrite(led12, HIGH);
+    digitalWrite(led13, LOW);
+    digitalWrite(led14, LOW);
+  } else if (pontos1 >= 24 && pontos1 < 32) {
+    // Apaga tudo, e acende 3 leds
+    digitalWrite(led11, HIGH);
+    digitalWrite(led12, HIGH);
+    digitalWrite(led13, HIGH);
+    digitalWrite(led14, LOW);
+  } else {
+    vencedor = 1;
+    // Acende todos os leds
+    digitalWrite(led21, LOW);
+    digitalWrite(led22, LOW);
+    digitalWrite(led23, LOW);
+    digitalWrite(led24, LOW);
+    digitalWrite(led11, HIGH);
+    digitalWrite(led12, HIGH);
+    digitalWrite(led13, HIGH);
+    digitalWrite(led14, HIGH);
+    return;
+  }
+
+  // Para ligar os leds do jogador 2
+  if (pontos2 < 8) {
+    digitalWrite(led21, LOW);
+    digitalWrite(led22, LOW);
+    digitalWrite(led23, LOW);
+    digitalWrite(led24, LOW);
+  } else if (pontos2 >= 8 && pontos2 < 16) {
+    digitalWrite(led21, HIGH);
+    digitalWrite(led22, LOW);
+    digitalWrite(led23, LOW);
+    digitalWrite(led24, LOW);
+  } else if (pontos2 >= 16 && pontos2 < 24) {
+    digitalWrite(led21, HIGH);
+    digitalWrite(led22, HIGH);
+    digitalWrite(led23, LOW);
+    digitalWrite(led24, LOW);
+  } else if (pontos2 >= 24 && pontos2 < 32) {
+    digitalWrite(led21, HIGH);
+    digitalWrite(led22, HIGH);
+    digitalWrite(led23, HIGH);
+    digitalWrite(led24, LOW);
+  } else {
+    vencedor = 2;
+    digitalWrite(led11, LOW);
+    digitalWrite(led12, LOW);
+    digitalWrite(led13, LOW);
+    digitalWrite(led14, LOW);
+    digitalWrite(led21, HIGH);
+    digitalWrite(led22, HIGH);
+    digitalWrite(led23, HIGH);
+    digitalWrite(led24, HIGH);
+  }
+}
+
+void loop() {
+  if (vencedor > 0) {
+    delay(2000);
+    vencedor = 0;
+    pontos1 = 0;
+    estadoAnterior1 = 0;
+    pontos2 = 0;
+    estadoAnterior2 = 0;
+    horaUltimoClick1 = 0;
+    horaUltimoClick2 = 0;
+    digitalWrite(led11, LOW);
+    digitalWrite(led12, LOW);
+    digitalWrite(led13, LOW);
+    digitalWrite(led14, LOW);
+    digitalWrite(led21, LOW);
+    digitalWrite(led22, LOW);
+    digitalWrite(led23, LOW);
+    digitalWrite(led24, LOW);
+    return;
+  }
+
+  long tempoDecorrido;
+  int pressionado;
+  long agora = millis();
+  
+  // Código player 1
+  pressionado = digitalRead(bot1);
+  if (pressionado == 1) {
+    if (estadoAnterior1 == 0) {
+      estadoAnterior1 = 1;
+      horaUltimoClick1 = agora;
+      pontos1 = pontos1 + 1;
+    }
+  } else {
+    estadoAnterior1 = 0;
+    tempoDecorrido = agora - horaUltimoClick1;
+    if (tempoDecorrido > 150 && pontos1 > 0) {
+      pontos1 = pontos1 - 1;
+      horaUltimoClick1 = agora;
+    }
+  }
+
+  // Código para o player 2
+  pressionado = digitalRead(bot2);
+  if (pressionado == 1) {
+    if (estadoAnterior2 == 0) {
+      estadoAnterior2 = 1;
+      horaUltimoClick2 = agora;
+      pontos2 = pontos2 + 1;
+    }
+  } else {
+    estadoAnterior2 = 0;
+    tempoDecorrido = agora - horaUltimoClick2;
+    if (tempoDecorrido > 150 && pontos2 > 0) {
+      pontos2 = pontos2 - 1;
+      horaUltimoClick2 = agora;
+    }
+  }
+  
+  atualizarBarrinha();
+}
+
