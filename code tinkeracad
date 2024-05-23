@@ -1,0 +1,133 @@
+int pontos1;
+int estadoAnterior1;
+int pontos2;
+int estadoAnterior2;
+long horaUltimoClick1;
+long horaUltimoClick2;
+
+// Função para inicializar o jogo
+void setup() {
+  Serial.begin(9600);
+  pontos1 = 0;
+  estadoAnterior1 = 0;
+  pontos2 = 0;
+  estadoAnterior2 = 0;
+  horaUltimoClick1 = 0;
+  horaUltimoClick2 = 0;
+  pinMode(2, INPUT);
+  pinMode(3, INPUT);
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(7, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+}
+
+void atualizarBarrinha() {
+  // Para ligar os leds do jogador 1
+  if (pontos1 == 0) {
+    // Apaga todos os leds
+    digitalWrite(4, LOW);
+    digitalWrite(5, LOW);
+    digitalWrite(6, LOW);
+    digitalWrite(7, LOW);
+  } else if (pontos1 == 1) {
+    // Apaga tudo, e acende 1 led
+    digitalWrite(4, HIGH);
+    digitalWrite(5, LOW);
+    digitalWrite(6, LOW);
+    digitalWrite(7, LOW);
+  } else if (pontos1 == 2) {
+    // Apaga tudo, e acende 2 leds
+    digitalWrite(4, HIGH);
+    digitalWrite(5, HIGH);
+    digitalWrite(6, LOW);
+    digitalWrite(7, LOW);
+  } else if (pontos1 == 3) {
+    // Apaga tudo, e acende 3 leds
+    digitalWrite(4, HIGH);
+    digitalWrite(5, HIGH);
+    digitalWrite(6, HIGH);
+    digitalWrite(7, LOW);
+  } else {
+    // Acende todos os leds
+    digitalWrite(4, HIGH);
+    digitalWrite(5, HIGH);
+    digitalWrite(6, HIGH);
+    digitalWrite(7, HIGH);
+  }
+    // Para ligar os leds do jogador 2
+  if (pontos2 == 0) {
+    digitalWrite(8, LOW);
+    digitalWrite(9, LOW);
+    digitalWrite(10, LOW);
+    digitalWrite(11, LOW);
+  } else if (pontos2 == 1) {
+    digitalWrite(8, HIGH);
+    digitalWrite(9, LOW);
+    digitalWrite(10, LOW);
+    digitalWrite(11, LOW);
+  } else if (pontos2 == 2) {
+    digitalWrite(8, HIGH);
+    digitalWrite(9, HIGH);
+    digitalWrite(10, LOW);
+    digitalWrite(11, LOW);
+  } else if (pontos2 == 3) {
+    digitalWrite(8, HIGH);
+    digitalWrite(9, HIGH);
+    digitalWrite(10, HIGH);
+    digitalWrite(11, LOW);
+  } else {
+    digitalWrite(8, HIGH);
+    digitalWrite(9, HIGH);
+    digitalWrite(10, HIGH);
+    digitalWrite(11, HIGH);
+  }
+}
+
+
+void loop() {
+  long tempoDecorrido;
+  int pressionado;
+  long agora = millis();
+  
+  // Código player 1
+  pressionado = digitalRead(2);
+  if (pressionado == 1) {
+    if (estadoAnterior1 == 0) {
+      estadoAnterior1 = 1;
+      horaUltimoClick1 = agora;
+      pontos1 = pontos1 + 1;
+    }
+  } 
+  else {
+    estadoAnterior1 = 0;
+    tempoDecorrido = agora - horaUltimoClick1;
+    if (tempoDecorrido > 500 && pontos1 > 0) {
+      pontos1 = pontos1 - 1;
+      horaUltimoClick1 = agora;
+    }
+  }
+
+  // Código para o player 2
+  pressionado = digitalRead(3);
+  if (pressionado == 1) {
+    if (estadoAnterior2 == 0) {
+      estadoAnterior2 = 1;
+      horaUltimoClick2= agora;
+      pontos2 = pontos2 + 1;
+    }
+  } else {
+    estadoAnterior2 = 0;
+    tempoDecorrido = agora - horaUltimoClick2;
+    if (tempoDecorrido > 500 && pontos1 > 0) {
+      pontos2 = pontos2 - 1;
+      horaUltimoClick2 = agora;
+    }
+  }
+  
+  atualizarBarrinha();
+}
