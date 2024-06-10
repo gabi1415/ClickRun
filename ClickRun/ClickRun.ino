@@ -9,7 +9,7 @@ const char* password = STAPSK;
 
 ESP8266WebServer server(80);
 
-static const char htmlHead[] PROGMEM = "<!DOCTYPE html><html lang=\"pt-br\"><head><meta charset=\"UTF-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /><title>ClickRun</title><style type=\"text/css\">body, html {margin: 0;padding: 0;background: #333333;height: 100vh;min-height;}body {background-repeat: no-repeat;background-position: center center;background-size: contain;background-image: url(https://gabi1415.github.io/arduino/";
+static const char htmlHead[] PROGMEM = "<!DOCTYPE html><html lang=\"pt-br\"><head><meta charset=\"UTF-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /><title>ClickRun</title><style type=\"text/css\">body, html {margin: 0;padding: 0;background: #333333;height: 100vh;min-height;}body {background-repeat: no-repeat;background-position: center center;background-size: contain;background-image: url(https://gabi1415.github.io/ClickRun/";
 static const char htmlMeio[] PROGMEM = ".png);}a {display: block;width: 100%;height: 100%;text-decoration: none;}</style></head><body>";
 static const char htmlFinalLink[] PROGMEM = "<a href=\"/iniciar\">&nbsp;</a></body></html>\r\n";
 static const char htmlFinalJogo[] PROGMEM = "<script>setTimeout(function () { window.location.href='/jogo'; }, 5000);</script></body></html>\r\n";
